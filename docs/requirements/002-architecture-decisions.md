@@ -2,138 +2,102 @@
 
 ## Overview
 
-Technical decisions for Rumor Busted MVP, optimized for speed-to-market while keeping the door open for future evolution.
+Keep it simple. Local-first. No cloud dependencies.
 
 ---
 
 ## Decision 1: Knowledge Base Storage
 
-### Options Evaluated
+**Choice: SQLite file**
 
-| Option | Pros | Cons |
-|--------|------|------|
-| **SQLite (local)** | Simple, portable, zero setup | No cloud sync, single device |
-| **Turso** | SQLite-compatible, edge-deployed, scales well | Newer, less ecosystem |
-| **Supabase** | PostgreSQL, auth built-in, REST API, mobile SDKs, free tier | Heavier than needed for MVP |
-| **Markdown files** | Human-readable, git-friendly | Hard to query, no structure |
+That's it. A single `.db` file on your machine.
 
-### Recommendation: Supabase
+```
+~/.rumor-busted/knowledge.db
+```
 
 **Why:**
-- Free tier covers MVP
-- Auth built-in (needed for "user's knowledge base")
-- REST API works with any client (WhatsApp bot today, mobile app later)
-- Official SDKs for React Native, Swift, Kotlin (future mobile app)
-- PostgreSQL = can add vector search later (for semantic KB queries)
+- Zero setup
+- Zero dependencies
+- Zero cost
+- Works offline
+- Easy to backup (it's just a file)
+- Easy to inspect (`sqlite3 knowledge.db`)
 
-### Swappability Strategy
-
-Use a **Repository Pattern** to abstract storage:
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  Rumor Busted   │ ──► │  KnowledgeRepo  │ ──► │    Supabase     │
-│     Service     │     │   (interface)   │     │   (for now)     │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                                │
-                                ▼
-                        Future: Turso, SQLite, 
-                        Notion API, Obsidian, etc.
-```
-
-**Interface:**
-```typescript
-interface KnowledgeRepository {
-  save(userId: string, entry: KnowledgeEntry): Promise<void>
-  list(userId: string): Promise<KnowledgeEntry[]>
-  get(userId: string, id: string): Promise<KnowledgeEntry | null>
-  delete(userId: string, id: string): Promise<void>
-  search(userId: string, query: string): Promise<KnowledgeEntry[]>
-}
+**Schema:**
+```sql
+CREATE TABLE knowledge (
+  id TEXT PRIMARY KEY,
+  claim TEXT NOT NULL,
+  verdict TEXT NOT NULL,  -- 'confirmed' | 'partially_true'
+  summary TEXT NOT NULL,
+  sources TEXT,           -- JSON array of URLs
+  original_link TEXT,
+  tags TEXT,              -- JSON array
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
 ```
 
-Swap storage by implementing a new repository — no service changes needed.
+**Swap later?** Abstract behind a repository interface. But don't build that until we need it.
 
 ---
 
-## Decision 2: Entry Point / Interface
+## Decision 2: Entry Point
 
-### Options Evaluated
-
-| Option | Pros | Cons |
-|--------|------|------|
-| **WhatsApp via OpenClaw** | Zero app install, familiar UX, quick MVP | Limited UI, depends on OpenClaw |
-| **Telegram bot** | Easy bot API, rich features | Smaller user base |
-| **Web app** | Full control, rich UI | Needs hosting, users must visit |
-| **Mobile app** | Best UX, native features | Weeks of dev, app store review |
-| **Browser extension** | Context at source (Twitter, etc.) | Limited mobile support |
-
-### Recommendation: WhatsApp via OpenClaw (MVP)
-
-**Why:**
-- Users already have WhatsApp
-- OpenClaw handles the integration
-- Share link → get verdict → done
-- No app install friction
-
-### Future Mobile App Strategy
-
-Design **API-first** so mobile app can reuse everything:
+**Choice: WhatsApp via local OpenClaw gateway**
 
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│    WhatsApp     │     │                 │     │                 │
-│   (OpenClaw)    │ ──► │   Rumor Busted  │ ◄── │   Mobile App    │
-│                 │     │      API        │     │    (future)     │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                               │
-                               ▼
-                        ┌─────────────────┐
-                        │   Research +    │
-                        │   Knowledge     │
-                        │    Services     │
-                        └─────────────────┘
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  WhatsApp   │ ──► │  OpenClaw   │ ──► │ Rumor Busted│
+│   (phone)   │     │  Gateway    │     │   Skill     │
+└─────────────┘     │  (local)    │     └─────────────┘
+                    └─────────────┘            │
+                                               ▼
+                                        ┌─────────────┐
+                                        │   SQLite    │
+                                        │ (local file)│
+                                        └─────────────┘
 ```
 
-**API Endpoints (draft):**
-```
-POST /api/verify          # Submit claim/link for verification
-GET  /api/verify/:id      # Check verification status
-GET  /api/knowledge       # List user's saved knowledge
-DELETE /api/knowledge/:id # Remove entry
-```
-
-WhatsApp bot and future mobile app both call the same API.
+**How it works:**
+1. You send a link to WhatsApp
+2. OpenClaw receives it, triggers Rumor Busted skill
+3. Skill researches the claim (web_fetch, etc.)
+4. Returns verdict
+5. If confirmed → saves to local SQLite
 
 ---
 
-## Decision 3: Tech Stack
+## Decision 3: What We're Building
 
-| Layer | Choice | Rationale |
-|-------|--------|-----------|
-| **Runtime** | Node.js | Same as OpenClaw, team familiarity |
-| **Framework** | Hono or Express | Lightweight, works anywhere |
-| **Database** | Supabase (PostgreSQL) | See Decision 1 |
-| **Auth** | Supabase Auth | Comes free with Supabase |
-| **Hosting** | Railway or Fly.io | Simple deploys, free tier |
-| **Research** | Web fetch + LLM | OpenClaw's existing capabilities |
+An **OpenClaw skill** with:
+- `SKILL.md` — prompts and workflow
+- `mcp.json` — MCP server config (optional, for tools)
+- Simple MCP server with tools:
+  - `verify_claim` — research a link/claim
+  - `save_to_knowledge` — store verified fact
+  - `list_knowledge` — show saved facts
+  - `search_knowledge` — find past facts
+
+Or even simpler for v0: just the skill file, use OpenClaw's built-in `web_fetch` for research, shell out to `sqlite3` for storage.
 
 ---
 
 ## Summary
 
-| Decision | MVP Choice | Swap Path |
-|----------|-----------|-----------|
-| Knowledge Base | Supabase | Repository pattern |
-| Entry Point | WhatsApp/OpenClaw | API-first design |
-| Mobile App | Not in MVP | API ready for it |
+| What | Choice |
+|------|--------|
+| Storage | SQLite file (`~/.rumor-busted/knowledge.db`) |
+| Interface | WhatsApp → OpenClaw (local) |
+| Deployment | Your laptop |
+| Cloud | None |
+| Auth | None (single user) |
 
 ---
 
-## Open Questions (Resolved)
+## Next Steps
 
-| Question | Resolution |
-|----------|------------|
-| What is the knowledge base? | Supabase with repository abstraction |
-| How does user submit? | WhatsApp via OpenClaw |
-| Future mobile app? | API-first, ready when needed |
+1. Create the skill (`SKILL.md`)
+2. Init the SQLite database
+3. Test via WhatsApp
+
