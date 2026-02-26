@@ -12,22 +12,22 @@ Articles aren't "true" or "false" as a whole. They're a mix of:
 - Opinions
 - Outright errors
 
-**We break articles into individual say — each thing the article says — and evaluate each one.**
+**We break articles into individual sayings — each thing the article says — and evaluate each one.**
 
 ## Workflow
 
-### Step 1: Extract Say
+### Step 1: Extract Sayings
 
 When user shares a link:
 
 1. Fetch the content
-2. Identify what the article say (each discrete say)
+2. Identify what the article says (each discrete saying)
 3. Note which are verifiable vs opinion
 
 **Example:**
 > Article: "MCP is dead! OpenAI's new Agents SDK replaces it completely, and Google's A2A protocol is the final nail in the coffin."
 
-**Extracted say:**
+**Extracted sayings:**
 1. "MCP is deprecated/dead"
 2. "OpenAI's Agents SDK replaces MCP"
 3. "Google's A2A protocol replaces MCP"
@@ -35,9 +35,9 @@ When user shares a link:
 **Noted as opinion:**
 - "final nail in the coffin" — dramatic framing, not verifiable
 
-### Step 2: Research Each Say
+### Step 2: Research Each Saying
 
-For each extracted say:
+For each extracted saying:
 
 - Check **minimum 5 sources**
 - Prioritize primary sources:
@@ -52,9 +52,9 @@ For each extracted say:
 - Direct quotes where possible
 - Conflicting information if found
 
-### Step 3: Verdict Per Say
+### Step 3: Verdict Per Saying
 
-For each say, deliver one of:
+For each saying, deliver one of:
 
 | Verdict | Meaning | When to use |
 |---------|---------|-------------|
@@ -66,7 +66,7 @@ For each say, deliver one of:
 
 ### Step 4: Synthesize Overall Assessment
 
-After evaluating all say:
+After evaluating all sayings:
 
 1. Summarize what's supported, what's false, what's opinion
 2. Call out misleading framing if present
@@ -120,7 +120,7 @@ MCP, not replaces it. They solve different problems:
 
 **Reliability: Low**
 
-Article contains 1 partially true say and 2 false say.
+Article contains 1 partially true saying and 2 false sayings.
 Framing ("dead", "final nail") is sensationalist and unsupported.
 ```
 
@@ -148,8 +148,8 @@ Not all sources are equal:
 
 - Opinions get marked as 💭 OPINION — no verdict needed
 - "X is the best" = opinion
-- "X has feature Y" = verifiable say
-- "X is dead" = verifiable say (check the evidence)
+- "X has feature Y" = verifiable saying
+- "X is dead" = verifiable saying (check the evidence)
 
 ## Tone
 
