@@ -66,7 +66,7 @@ tags: [AI, protocols, MCP, A2A, Google]
 
 ## Open Questions
 
-1. **What is the "knowledge base"?** — Local storage? Cloud sync? Integration with existing tools (Notion, Obsidian)?
+1. ~~**What is the "knowledge base"?**~~ → **Resolved:** Supabase with repository pattern for swappability. See [002-architecture-decisions.md](002-architecture-decisions.md).
 2. **User control** — Can user opt-out of auto-save? Delete entries?
 3. **Duplicates** — How to handle if user submits same claim twice?
 
