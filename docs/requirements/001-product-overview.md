@@ -14,24 +14,24 @@ The AI/tech space is drowning in noise:
 
 **Rumor Busted cuts through the BS.**
 
-We don't just say "true" or "false" — we break articles down into individual claims, research each one, and give you an honest assessment. The verified facts get saved to your personal knowledge base.
+We don't just label articles "true" or "false" — we break them down into what they say, research each one, and give you an honest assessment. The verified say get saved to your personal knowledge base.
 
 ## Core Value Proposition
 
 1. **Research, not regurgitation** — We check primary sources (5 minimum), not just repeat what the article says
-2. **Fact-level analysis** — Articles aren't "true" or "false" in one piece. We break them into claims and evaluate each
+2. **Say-level analysis** — Articles aren't "true" or "false" in one piece. We break them into what they say and evaluate each
 3. **Honest verdicts** — We show what's supported, what's opinion, and what's misleading
-4. **Knowledge building** — Verified facts are saved so you can reference them later
+4. **Knowledge building** — Verified say are saved so you can reference them later
 
 ## MVP Scope
 
 ### In Scope
 
-- User shares a link or claim via WhatsApp
-- System breaks article/claim into individual facts
-- System researches each fact (minimum 5 sources)
-- System delivers verdict for each fact
-- Verified facts saved to local knowledge base
+- User shares a link via WhatsApp
+- System breaks article into individual say
+- System researches each say (minimum 5 sources)
+- System delivers verdict for each say
+- Verified say saved to local knowledge base
 - User can view saved knowledge
 
 ### Out of Scope (MVP)
@@ -52,24 +52,24 @@ User sees sketchy article on Twitter
 Shares link to Rumor Busted (WhatsApp)
          │
          ▼
-System extracts claims from article
+System extracts say from article
          │
          ▼
-For each claim:
+For each say:
   - Research (5+ sources)
-  - Verdict (confirmed/busted/partial/unverified)
+  - Verdict (confirmed/busted/partial/opinion/unverified)
          │
          ▼
 Returns breakdown to user
          │
          ▼
-Verified facts saved to knowledge base
+Verified say saved to knowledge base
 ```
 
 ## Success Criteria
 
 - User gets honest, researched verdicts (not just "true/false")
-- User builds a personal knowledge base of verified facts over time
+- User builds a personal knowledge base of verified say over time
 - User trusts the tool enough to use it regularly
 
 ## Origin Story

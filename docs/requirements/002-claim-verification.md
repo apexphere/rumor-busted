@@ -2,42 +2,42 @@
 
 ## Overview
 
-How Rumor Busted researches claims and delivers verdicts. The core of the product.
+How Rumor Busted researches and delivers verdicts. The core of the product.
 
-## Key Principle: Fact-Level Analysis
+## Key Principle: Break It Down
 
 Articles aren't "true" or "false" as a whole. They're a mix of:
-- Accurate facts
+- Verifiable statements
 - Misleading framing
-- Unsupported opinions
+- Opinions
 - Outright errors
 
-**We break articles into individual facts and evaluate each one.**
+**We break articles into individual say — each thing the article says — and evaluate each one.**
 
 ## Workflow
 
-### Step 1: Extract Facts
+### Step 1: Extract Say
 
-When user shares a link or claim:
+When user shares a link:
 
 1. Fetch the content
-2. Identify discrete factual claims
-3. Separate facts from opinions/framing
+2. Identify what the article say (each discrete say)
+3. Note which are verifiable vs opinion
 
 **Example:**
 > Article: "MCP is dead! OpenAI's new Agents SDK replaces it completely, and Google's A2A protocol is the final nail in the coffin."
 
-**Extracted facts:**
+**Extracted say:**
 1. "MCP is deprecated/dead"
 2. "OpenAI's Agents SDK replaces MCP"
 3. "Google's A2A protocol replaces MCP"
 
-**Noted as opinion (not fact-checked):**
-- "final nail in the coffin" — dramatic framing, not a factual claim
+**Noted as opinion:**
+- "final nail in the coffin" — dramatic framing, not verifiable
 
-### Step 2: Research Each Fact
+### Step 2: Research Each Say
 
-For each extracted fact:
+For each extracted say:
 
 - Check **minimum 5 sources**
 - Prioritize primary sources:
@@ -52,22 +52,23 @@ For each extracted fact:
 - Direct quotes where possible
 - Conflicting information if found
 
-### Step 3: Verdict Per Fact
+### Step 3: Verdict Per Say
 
-For each fact, deliver one of:
+For each say, deliver one of:
 
 | Verdict | Meaning | When to use |
 |---------|---------|-------------|
-| ✅ **CONFIRMED** | Fact is accurate | Backed by primary sources |
-| ❌ **BUSTED** | Fact is false or misleading | Contradicted by evidence |
-| ⚠️ **PARTIALLY TRUE** | Some truth, missing context | True but oversimplified or misleading framing |
+| ✅ **CONFIRMED** | Supported by evidence | Backed by primary sources |
+| ❌ **BUSTED** | False or misleading | Contradicted by evidence |
+| ⚠️ **PARTIALLY TRUE** | Some truth, missing context | Oversimplified or misleading framing |
 | 🤷 **UNVERIFIED** | Can't confirm or deny | Insufficient evidence either way |
+| 💭 **OPINION** | Not verifiable | Subjective, no verdict needed |
 
 ### Step 4: Synthesize Overall Assessment
 
-After evaluating all facts:
+After evaluating all say:
 
-1. Summarize what's true, what's false, what's opinion
+1. Summarize what's supported, what's false, what's opinion
 2. Call out misleading framing if present
 3. Give overall assessment of the article's reliability
 
@@ -77,7 +78,7 @@ After evaluating all facts:
 
 **Source:** [link to original article]
 
-### Fact 1: "MCP is dead"
+### Say 1: "MCP is dead"
 ❌ BUSTED
 
 MCP is actively maintained. Latest schema update: 2025-11-25.
@@ -89,7 +90,7 @@ Official docs at modelcontextprotocol.io are current.
 
 ---
 
-### Fact 2: "OpenAI's Agents SDK replaces MCP"
+### Say 2: "OpenAI's Agents SDK replaces MCP"
 ⚠️ PARTIALLY TRUE
 
 OpenAI released an Agents SDK, but it's their own proprietary
@@ -102,7 +103,7 @@ MCP is an open standard that continues independently.
 
 ---
 
-### Fact 3: "Google's A2A replaces MCP"
+### Say 3: "Google's A2A replaces MCP"
 ❌ BUSTED
 
 Google's own announcement explicitly states A2A "complements"
@@ -119,7 +120,7 @@ MCP, not replaces it. They solve different problems:
 
 **Reliability: Low**
 
-Article contains 1 partially true claim and 2 false claims.
+Article contains 1 partially true say and 2 false say.
 Framing ("dead", "final nail") is sensationalist and unsupported.
 ```
 
@@ -143,12 +144,12 @@ Not all sources are equal:
 - Look for quotes/summaries from credible sources
 - Don't make verdicts based on content we can't see
 
-### Handling Opinion vs Fact
+### Handling Opinion vs Verifiable
 
-- Opinions don't get verdicts — they're noted as opinions
+- Opinions get marked as 💭 OPINION — no verdict needed
 - "X is the best" = opinion
-- "X has feature Y" = fact (verifiable)
-- "X is dead" = claim (verify with evidence)
+- "X has feature Y" = verifiable say
+- "X is dead" = verifiable say (check the evidence)
 
 ## Tone
 
